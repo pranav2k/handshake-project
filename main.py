@@ -1,8 +1,7 @@
 from datetime import datetime
 
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from sqlalchemy.orm import sessionmaker, declarative_base
 
@@ -45,15 +44,26 @@ def seed():
 seed()
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
-@app.get("/index", response_class=HTMLResponse)
-def index(request: Request):
+@app.get("/api/students")
+def get_students():
     db = SessionLocal()
     students = db.query(Student).all()
     db.close()
-    return templates.TemplateResponse("index.html", {
-        "request": request,
-        "students": students,
-    })
+    return [
+        {
+            "id": s.id,
+            "first_name": s.first_name,
+            "last_name": s.last_name,
+            "check_in_time": s.check_in_time.isoformat() + " UTC",
+        }
+        for s in students
+    ]

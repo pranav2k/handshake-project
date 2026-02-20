@@ -1,5 +1,7 @@
 ## Setup
 
+### Backend (terminal 1)
+
 ```bash
 cd ~/handshake-project
 python3 -m venv .venv
@@ -8,4 +10,12 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-Visit http://127.0.0.1:8000/index
+### Frontend (terminal 2)
+
+```bash
+cd ~/handshake-project/frontend
+npm install
+npm run dev
+```
+
+Visit http://localhost:5173/index
