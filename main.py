@@ -2,6 +2,7 @@ from datetime import datetime
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from sqlalchemy.orm import sessionmaker, declarative_base
 
@@ -43,6 +44,12 @@ def seed():
 
 seed()
 
+
+class StudentCreate(BaseModel):
+    first_name: str
+    last_name: str
+    check_in_time: str
+
 app = FastAPI()
 
 app.add_middleware(
@@ -67,3 +74,16 @@ def get_students():
         }
         for s in students
     ]
+
+
+@app.post("/api/students")
+def create_student(student: StudentCreate):
+    db = SessionLocal()
+    db.add(Student(
+        first_name=student.first_name,
+        last_name=student.last_name,
+        check_in_time=student.check_in_time,
+    ))
+    db.commit()
+    db.close()
+    return {"ok": True}
