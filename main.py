@@ -69,7 +69,7 @@ def get_students():
             "id": s.id,
             "first_name": s.first_name,
             "last_name": s.last_name,
-            "check_in_time": s.check_in_time.isoformat() + " UTC",
+            "check_in_time": s.check_in_time.isoformat(),
         }
         for s in students
     ]
