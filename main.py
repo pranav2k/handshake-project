@@ -94,3 +94,15 @@ def delete_student(student_id: int):
     db.commit()
     db.close()
     return {"ok": True}
+
+@app.put("/api/students/{student_id}")
+def update_student(student_id: int, data: StudentCreate):
+    db = SessionLocal()
+    student = db.query(Student).get(student_id)
+    student.first_name = data.first_name
+    student.last_name = data.last_name
+    student.check_in_time = data.check_in_time
+    db.commit()
+    db.close()
+    return {"ok": True}
+
