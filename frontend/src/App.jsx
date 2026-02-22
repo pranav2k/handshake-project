@@ -21,7 +21,7 @@ function App() {
     fetch("/api/students", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify(form), 
     })
       .then(() => fetch("/api/students"))
       .then((res) => res.json())

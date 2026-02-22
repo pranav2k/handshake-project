@@ -82,7 +82,7 @@ def create_student(student: StudentCreate):
     db.add(Student(
         first_name=student.first_name,
         last_name=student.last_name,
-        check_in_time=student.check_in_time,
+        check_in_time=datetime.fromisoformat(student.check_in_time.replace(" UTC", "")),
     ))
     db.commit()
     db.close()
