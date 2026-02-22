@@ -3,6 +3,12 @@ import "./App.css";
 
 function App() {
   const [students, setStudents] = useState([]);
+  const [showForm, setShowForm] = useState(False)
+  const [form, setForm] = useState({
+    first_name: "",
+    last_name: "",
+    check_in_time: ""
+  })
 
   useEffect(() => {
     fetch("/api/students")

@@ -41,6 +41,11 @@ def seed():
         db.commit()
     db.close()
 
+class StudentCreate(BaseModel):
+    first_name: str
+    last_name: str
+    check_in_time: datetime 
+
 
 seed()
 
@@ -68,3 +73,15 @@ def get_students():
         }
         for s in students
     ]
+
+@app.post("/api/students")
+def create_student(data: StudentCreate):
+    db = SessionLocal()
+    db.add(Student(
+        first_name=data.first_name,
+        last_name=data.last_name,
+        check_in_time=data.check_in_time
+    ))
+    db.commit()
+    db.close()
+    return {"ok": True}
