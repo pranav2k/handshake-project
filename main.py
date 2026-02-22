@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from sqlalchemy.orm import sessionmaker, declarative_base
+from pydantic import BaseModel
 
 engine = create_engine("sqlite:///students.db")
 SessionLocal = sessionmaker(bind=engine)
