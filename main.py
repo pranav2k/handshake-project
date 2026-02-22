@@ -1,3 +1,4 @@
+from calendar import firstweekday
 from datetime import datetime
 
 from fastapi import FastAPI
@@ -41,6 +42,11 @@ def seed():
         db.commit()
     db.close()
 
+class StudentCreate(BaseModel):
+    first_name: str
+    last_name: str
+    check_in_time: datetime
+
 
 seed()
 
@@ -68,3 +74,35 @@ def get_students():
         }
         for s in students
     ]
+
+@app.post("/api/students")
+def create_student(data: StudentCreate):
+    db = SessionLocal()
+    student = Student(
+        first_name=data.first_name,
+        last_name=data.last_name,
+        check_in_time=data.check_in_time
+    )
+    db.add(student)
+    db.commit()
+    db.close()
+    return {"ok": True}
+
+@app.delete("/api/students/{student_id}")
+def delete_student(student_id: int):
+    db = SessionLocal()
+    student = db.query(Student).get(student_id)
+    db.delete(student)
+    db.commit()
+    db.close()
+
+@app.put("/api/students/{student_id}")
+def update_student(student_id: int, data: StudentCreate):
+    db = SessionLocal()
+    student = db.query(Student).get(student_id)
+    student.first_name = data.first_name
+    student.last_name = data.last_name
+    student.check_in_time = data.check_in_time
+    db.commit()
+    db.close()
+    return {"ok": True}
