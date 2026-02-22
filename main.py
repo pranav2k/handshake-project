@@ -85,3 +85,12 @@ def create_student(data: StudentCreate):
     db.commit()
     db.close()
     return {"ok": True}
+
+@app.delete("/api/students/{student_id}")
+def delete_student(student_id: int):
+    db = SessionLocal()
+    student = db.query(Student).get(student_id)
+    db.delete(student)
+    db.commit()
+    db.close()
+    return {"ok": True}
